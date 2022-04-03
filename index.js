@@ -14,7 +14,7 @@ let ProtectedServerStatus = {
 }
 
 var getpid = require('getpid');
-let cookie = "_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_5F7F278B355E482ED05AA4C01C01B04E05B5368586F11D5C777CBED4798087440752750BE7203235E81A3BE54D5DC9F7C4F829A89B59D2468DEE33B1136C2111E4868EAA47C710A6848E35064AD079D6C6CE4707E966B10C508030505DF9FF2F4CC936D5BDA8E34FD70633F9A98726887E27073FAE3324F212473DBCB5CB567EBCC01C0452DDC4C73B06AAA1DD2A86424814DD2DA1E48557D085A30EF82A09EDCEC3E317C38F9F6A63C646A88FC9C8E4662D8333296CB5C2B7F071A22CC660B1F845079BA5D9C95A5CFEEA1343360799A72B2F3F49A55FD1322C2E0644847311DAE7EA2D0356B899B8B9920E31033AC5A2C92052543473C447C6AB9C731F2E0EEAA23BADA90B631CA8352C983FF36A810A4D08E1AA21831865A18CDB3440E116FE3CCCB9DC7541D35244874CCECC35387BF44BAE85A9117FDF7C41AE4BD5E67BFEAA47CDE8F554D30FB9419FF124254CC89AC5EF"
+let cookie = CurrentApprovedVersion.cookie
 let xsrfToken = 0;
 const noblox = require("noblox.js")
 
@@ -23,10 +23,9 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 
 async function Init() {
-    const currentUser = await noblox.setCookie(cookie)
+    const currentUser = await noblox.setCookie("_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_7C3A122BEDE27A08B460BFE61774F435B6CFEAAC9A192D9673211053EA66ACC21DEB9F1F975D9346A9D05E09B55F600092C320D57F23A7BB36F20FA4948170AF60A89088F73471F3D4E8ED27259CC9BEB12415D1D7F1CF721DA6DC6A5A37ACDA9C26F1029B435E81ED71F83DB8306163B6C60012684340A5DB63AAB54405E9469A0E20F71DDCE9A813DA4222D9A9EE63ED8E6A0DDCECFC7ADD0D77DE315842F376A6C980545E0CEE34E41B4F8B9FAE52B636BDB94992CE2EBDC1B6F8A85E4CE4CB06DE3E27F6DCE8F19685045F14215D4E05C351F3DD92004EB166898263A31B61AA0BACDA3522D8B48350994FF78340EF4402D5C8C8766333173364866DA04F90D27EB8B0108F2E2947775EC38F8D6E046384ABE93099BE457F880039D102A2B564695E82F360918CEC32CEB35D09C8790AC82AA73C6FFF967EA4924348E899094AE119C69FE074073F476AD4BF1C73DB1685C7")
     console.log(`Logged in as ${currentUser.UserName} [${currentUser.UserID}]`)
     xsrfToken = await noblox.getGeneralToken();
-    ShutDownGames();
 }
 
 Init();
@@ -82,7 +81,7 @@ async function PrivatizeGame() {
             'url': 'https://develop.roblox.com/v1/universes/258090298/deactivate',
             'headers': {
                 'x-csrf-token': xsrfToken,
-                'Cookie': '.RBXID=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4N2I3NjNlYi02YzRlLTRiODgtYjk2NC00ZDNjMDcxMzYwY2QiLCJzdWIiOjc5MDY1M30.YNGDmLS4v_sCH20jeD35-qAnT0xi2lUf1fsFtEQMLhQ; .RBXIDCHECK=dfcaa970-3bd0-4324-ad41-cf464d3df942; .ROBLOSECURITY=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_5F7F278B355E482ED05AA4C01C01B04E05B5368586F11D5C777CBED4798087440752750BE7203235E81A3BE54D5DC9F7C4F829A89B59D2468DEE33B1136C2111E4868EAA47C710A6848E35064AD079D6C6CE4707E966B10C508030505DF9FF2F4CC936D5BDA8E34FD70633F9A98726887E27073FAE3324F212473DBCB5CB567EBCC01C0452DDC4C73B06AAA1DD2A86424814DD2DA1E48557D085A30EF82A09EDCEC3E317C38F9F6A63C646A88FC9C8E4662D8333296CB5C2B7F071A22CC660B1F845079BA5D9C95A5CFEEA1343360799A72B2F3F49A55FD1322C2E0644847311DAE7EA2D0356B899B8B9920E31033AC5A2C92052543473C447C6AB9C731F2E0EEAA23BADA90B631CA8352C983FF36A810A4D08E1AA21831865A18CDB3440E116FE3CCCB9DC7541D35244874CCECC35387BF44BAE85A9117FDF7C41AE4BD5E67BFEAA47CDE8F554D30FB9419FF124254CC89AC5EF; GuestData=UserID=-264852427; RBXEventTrackerV2=CreateDate=2/15/2022 10:47:19 AM&rbxid=95810626&browserid=126564420920; RBXSessionTracker=sessionid=f12730ef-3ff7-4a84-87ce-6b9a410fbbb9; _vs=2146011694836773317:1645722615.7093155:5738379107656083806; rbx-ip2=; RBXcb=RBXViralAcquisition=false&RBXSource=false&GoogleAnalytics=false; __RequestVerificationToken=nKK3GRvulwaakHX1j3437E7xWOaXySRueoRSuTvV4B2phqLvHT7ARw84HfEtA10atreeJK0D56GtPf7ElAUHhAc23TE1'
+                'Cookie': cookie
             },
             formData: {
                 'universeId': 258090298
@@ -91,7 +90,9 @@ async function PrivatizeGame() {
         rp(options, function (error, response) {
             if (response.statusCode == 403) {
                 console.log("403 Forbidden")
-                xsrfToken = response.headers['x-csrf-token']
+                if (response.headers['x-csrf-token']) {
+                    xsrfToken = response.headers['x-csrf-token']
+                }
             }
         });
     } catch (error) {
@@ -101,7 +102,7 @@ async function PrivatizeGame() {
 
 
 async function OpenGame() {
-    if (xsrfToken == 0) { xsrfToken = await noblox.getGeneralToken();}
+    if (xsrfToken == 0) { xsrfToken = await noblox.getGeneralToken(); }
     try {
         console.log(`XSRF-TOKEN: ${xsrfToken}`)
         var options = {
@@ -109,7 +110,7 @@ async function OpenGame() {
             'url': 'https://develop.roblox.com/v1/universes/258090298/activate',
             'headers': {
                 'x-csrf-token': xsrfToken,
-                'Cookie': '.RBXID=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4N2I3NjNlYi02YzRlLTRiODgtYjk2NC00ZDNjMDcxMzYwY2QiLCJzdWIiOjc5MDY1M30.YNGDmLS4v_sCH20jeD35-qAnT0xi2lUf1fsFtEQMLhQ; .RBXIDCHECK=dfcaa970-3bd0-4324-ad41-cf464d3df942; .ROBLOSECURITY=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_5F7F278B355E482ED05AA4C01C01B04E05B5368586F11D5C777CBED4798087440752750BE7203235E81A3BE54D5DC9F7C4F829A89B59D2468DEE33B1136C2111E4868EAA47C710A6848E35064AD079D6C6CE4707E966B10C508030505DF9FF2F4CC936D5BDA8E34FD70633F9A98726887E27073FAE3324F212473DBCB5CB567EBCC01C0452DDC4C73B06AAA1DD2A86424814DD2DA1E48557D085A30EF82A09EDCEC3E317C38F9F6A63C646A88FC9C8E4662D8333296CB5C2B7F071A22CC660B1F845079BA5D9C95A5CFEEA1343360799A72B2F3F49A55FD1322C2E0644847311DAE7EA2D0356B899B8B9920E31033AC5A2C92052543473C447C6AB9C731F2E0EEAA23BADA90B631CA8352C983FF36A810A4D08E1AA21831865A18CDB3440E116FE3CCCB9DC7541D35244874CCECC35387BF44BAE85A9117FDF7C41AE4BD5E67BFEAA47CDE8F554D30FB9419FF124254CC89AC5EF; GuestData=UserID=-264852427; RBXEventTrackerV2=CreateDate=2/15/2022 10:47:19 AM&rbxid=95810626&browserid=126564420920; RBXSessionTracker=sessionid=f12730ef-3ff7-4a84-87ce-6b9a410fbbb9; _vs=2146011694836773317:1645722615.7093155:5738379107656083806; rbx-ip2=; RBXcb=RBXViralAcquisition=false&RBXSource=false&GoogleAnalytics=false; __RequestVerificationToken=nKK3GRvulwaakHX1j3437E7xWOaXySRueoRSuTvV4B2phqLvHT7ARw84HfEtA10atreeJK0D56GtPf7ElAUHhAc23TE1'
+                'Cookie': cookie
             },
             formData: {
                 'universeId': 258090298
@@ -118,7 +119,9 @@ async function OpenGame() {
         rp(options, function (error, response) {
             if (response.statusCode == 403) {
                 console.log("403 Forbidden")
-                xsrfToken = response.headers['x-csrf-token']
+                if (response.headers['x-csrf-token']) {
+                    xsrfToken = response.headers['x-csrf-token']
+                }
             }
         });
     } catch (error) {
@@ -134,7 +137,7 @@ async function ShutDownGames() {
             'url': 'https://www.roblox.com/games/shutdown-all-instances',
             'headers': {
                 'x-csrf-token': xsrfToken,
-                'Cookie': '.RBXID=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4N2I3NjNlYi02YzRlLTRiODgtYjk2NC00ZDNjMDcxMzYwY2QiLCJzdWIiOjc5MDY1M30.YNGDmLS4v_sCH20jeD35-qAnT0xi2lUf1fsFtEQMLhQ; .RBXIDCHECK=dfcaa970-3bd0-4324-ad41-cf464d3df942; .ROBLOSECURITY=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_5F7F278B355E482ED05AA4C01C01B04E05B5368586F11D5C777CBED4798087440752750BE7203235E81A3BE54D5DC9F7C4F829A89B59D2468DEE33B1136C2111E4868EAA47C710A6848E35064AD079D6C6CE4707E966B10C508030505DF9FF2F4CC936D5BDA8E34FD70633F9A98726887E27073FAE3324F212473DBCB5CB567EBCC01C0452DDC4C73B06AAA1DD2A86424814DD2DA1E48557D085A30EF82A09EDCEC3E317C38F9F6A63C646A88FC9C8E4662D8333296CB5C2B7F071A22CC660B1F845079BA5D9C95A5CFEEA1343360799A72B2F3F49A55FD1322C2E0644847311DAE7EA2D0356B899B8B9920E31033AC5A2C92052543473C447C6AB9C731F2E0EEAA23BADA90B631CA8352C983FF36A810A4D08E1AA21831865A18CDB3440E116FE3CCCB9DC7541D35244874CCECC35387BF44BAE85A9117FDF7C41AE4BD5E67BFEAA47CDE8F554D30FB9419FF124254CC89AC5EF; GuestData=UserID=-264852427; RBXEventTrackerV2=CreateDate=2/15/2022 10:47:19 AM&rbxid=95810626&browserid=126564420920; RBXSessionTracker=sessionid=f12730ef-3ff7-4a84-87ce-6b9a410fbbb9; _vs=2146011694836773317:1645722615.7093155:5738379107656083806; rbx-ip2=; RBXcb=RBXViralAcquisition=false&RBXSource=false&GoogleAnalytics=false; __RequestVerificationToken=nKK3GRvulwaakHX1j3437E7xWOaXySRueoRSuTvV4B2phqLvHT7ARw84HfEtA10atreeJK0D56GtPf7ElAUHhAc23TE1'
+                'Cookie': cookie
             },
             formData: {
                 'placeId': '627321314',
@@ -145,7 +148,9 @@ async function ShutDownGames() {
             if (response.statusCode == 403) {
                 console.log("403 Forbidden")
                 console.log(response.headers)
-                xsrfToken = response.headers['x-csrf-token']
+                if (response.headers['x-csrf-token']) {
+                    xsrfToken = response.headers['x-csrf-token']
+                }
                 ShutDownGames();
             }
         });
@@ -235,7 +240,7 @@ async function StartGame() {
                                         .setColor(0x00AE86)
                                         .setFooter("Server is in the Netherlands!")
                                         .setTimestamp()
-                                    client.channels.cache.get("937818692253802496").send({ embeds: [embed] }) 
+                                    client.channels.cache.get("937818692253802496").send({ embeds: [embed] })
                                     OpenGame();
                                     resolve('Server is in the Netherlands!')
                                 }
