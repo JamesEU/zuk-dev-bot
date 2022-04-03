@@ -77,8 +77,6 @@ var rp = require('request-promise');
 
 async function PrivatizeGame() {
     try {
-        const xsrfToken = await noblox.getGeneralToken();
-        console.log(`XSRF-TOKEN: ${xsrfToken}`)
         var options = {
             'method': 'POST',
             'url': 'https://develop.roblox.com/v1/universes/258090298/deactivate',
@@ -93,8 +91,35 @@ async function PrivatizeGame() {
         rp(options, function (error, response) {
             if (response.statusCode == 403) {
                 console.log("403 Forbidden")
+                xsrfToken = response.headers['x-csrf-token']
             }
-            xsrfToken = response.headers['x-csrf-token']
+        });
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+async function OpenGame() {
+    if (xsrfToken == 0) { xsrfToken = await noblox.getGeneralToken();}
+    try {
+        console.log(`XSRF-TOKEN: ${xsrfToken}`)
+        var options = {
+            'method': 'POST',
+            'url': 'https://develop.roblox.com/v1/universes/258090298/activate',
+            'headers': {
+                'x-csrf-token': xsrfToken,
+                'Cookie': '.RBXID=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4N2I3NjNlYi02YzRlLTRiODgtYjk2NC00ZDNjMDcxMzYwY2QiLCJzdWIiOjc5MDY1M30.YNGDmLS4v_sCH20jeD35-qAnT0xi2lUf1fsFtEQMLhQ; .RBXIDCHECK=dfcaa970-3bd0-4324-ad41-cf464d3df942; .ROBLOSECURITY=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_5F7F278B355E482ED05AA4C01C01B04E05B5368586F11D5C777CBED4798087440752750BE7203235E81A3BE54D5DC9F7C4F829A89B59D2468DEE33B1136C2111E4868EAA47C710A6848E35064AD079D6C6CE4707E966B10C508030505DF9FF2F4CC936D5BDA8E34FD70633F9A98726887E27073FAE3324F212473DBCB5CB567EBCC01C0452DDC4C73B06AAA1DD2A86424814DD2DA1E48557D085A30EF82A09EDCEC3E317C38F9F6A63C646A88FC9C8E4662D8333296CB5C2B7F071A22CC660B1F845079BA5D9C95A5CFEEA1343360799A72B2F3F49A55FD1322C2E0644847311DAE7EA2D0356B899B8B9920E31033AC5A2C92052543473C447C6AB9C731F2E0EEAA23BADA90B631CA8352C983FF36A810A4D08E1AA21831865A18CDB3440E116FE3CCCB9DC7541D35244874CCECC35387BF44BAE85A9117FDF7C41AE4BD5E67BFEAA47CDE8F554D30FB9419FF124254CC89AC5EF; GuestData=UserID=-264852427; RBXEventTrackerV2=CreateDate=2/15/2022 10:47:19 AM&rbxid=95810626&browserid=126564420920; RBXSessionTracker=sessionid=f12730ef-3ff7-4a84-87ce-6b9a410fbbb9; _vs=2146011694836773317:1645722615.7093155:5738379107656083806; rbx-ip2=; RBXcb=RBXViralAcquisition=false&RBXSource=false&GoogleAnalytics=false; __RequestVerificationToken=nKK3GRvulwaakHX1j3437E7xWOaXySRueoRSuTvV4B2phqLvHT7ARw84HfEtA10atreeJK0D56GtPf7ElAUHhAc23TE1'
+            },
+            formData: {
+                'universeId': 258090298
+            }
+        };
+        rp(options, function (error, response) {
+            if (response.statusCode == 403) {
+                console.log("403 Forbidden")
+                xsrfToken = response.headers['x-csrf-token']
+            }
         });
     } catch (error) {
         console.log(error)
@@ -132,7 +157,8 @@ async function ShutDownGames() {
 processedLogFiles = {}
 
 async function StartGame() {
-    let Promise = new Promise(async (resolve, reject) => {
+    PrivatizeGame();
+    let waiting = new Promise(async (resolve, reject) => {
         let FoundFile = false;
         const robloxPlayer = new RobloxPlayer()
         const player = await robloxPlayer.locate(true)
@@ -210,6 +236,7 @@ async function StartGame() {
                                         .setFooter("Server is in the Netherlands!")
                                         .setTimestamp()
                                     client.channels.cache.get("937818692253802496").send({ embeds: [embed] }) 
+                                    OpenGame();
                                     resolve('Server is in the Netherlands!')
                                 }
                             }
@@ -224,10 +251,8 @@ async function StartGame() {
             console.log(error)
         }
     })
-    return await Promise
+    return await waiting
 }
-
-StartGame();
 
 
 client.login("OTU4ODUwMTE2Mjc2NjA0OTg4.YkTUwg.zjRdYcvtBG6MjbFnVWfpp1kRYv8")
@@ -241,6 +266,19 @@ const commands = [
     },
 ]
 
+let StartingAlready = false;
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isCommand()) return;
+    if (interaction.commandName == "startprotectedserver") {
+        if (!interaction.member.roles.cache.some(role => role.name === "Moderator")) { return interaction.reply("You need the Moderator role to use this command!") }
+        if (StartingAlready) { return interaction.reply("Already starting a server!") }
+        StartingAlready = true;
+        console.log("Starting protected server!")
+        interaction.reply("Starting protected server! Please note, this can take some time. <#937818692253802496>")
+        let Status = await StartGame();
+        console.log(Status)
+    }
+});
 
 async function SyncCommands() {
     try {
